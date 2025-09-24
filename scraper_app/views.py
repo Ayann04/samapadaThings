@@ -382,12 +382,30 @@ def trigger_scrape(request):
                 
         while True:  # Keep looping through all pages until no next button
                     _create_status(new_run, "Fetch all record links on current page")
-                    # time.sleep(10)
-                    # # Wait until at least one record is present on page
-                    # data_elements_2 = driver.find_elements(By.CSS_SELECTOR,'td.mat-cell>span.link')
-                    # print(f"Found {len(data_elements_2)} records--------------")
+                    max_retries = 3   # how many times to retry if nothing found
+                    retries = 0
 
-                    for i in range(10):
+                    while retries < max_retries:
+                        try:
+                            time.sleep(10)  # let the page settle (can replace with WebDriverWait)
+                            data_elements_2 = driver.find_elements(By.CSS_SELECTOR, 'td.mat-cell>span.link')
+
+                            if len(data_elements_2) == 0:
+                                raise ValueError("No records found")  # trigger except block
+
+                            print(f"Found {len(data_elements_2)} records --------------")
+                            break   # ✅ exit loop if elements are found
+
+                        except Exception as e:
+                            print(f"Attempt {retries+1}: Failed to fetch records ({e})")
+                            retries += 1
+                            if retries < max_retries:
+                                print("Retrying...")
+                                time.sleep(5)  # wait before trying again
+                            else:
+                                print("Max retries reached. Moving on or exiting...")
+                    
+                    for i in range(len(data_elements_2):
                         # Re-fetch elements each time (important after navigation/closing modal)
                         data_elements_2 = driver.find_elements(By.CSS_SELECTOR,'td.mat-cell>span.link')
 
