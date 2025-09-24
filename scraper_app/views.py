@@ -382,12 +382,12 @@ def trigger_scrape(request):
                 
         while True:  # Keep looping through all pages until no next button
                     _create_status(new_run, "Fetch all record links on current page")
-                
-                    # Wait until at least one record is present on page
-                    data_elements_2 = driver.find_elements(By.CSS_SELECTOR,'td.mat-cell>span.link')
-                    print(f"Found {len(data_elements_2)} records--------------")
+                    # time.sleep(10)
+                    # # Wait until at least one record is present on page
+                    # data_elements_2 = driver.find_elements(By.CSS_SELECTOR,'td.mat-cell>span.link')
+                    # print(f"Found {len(data_elements_2)} records--------------")
 
-                    for i in range(len(data_elements_2)):
+                    for i in range(10):
                         # Re-fetch elements each time (important after navigation/closing modal)
                         data_elements_2 = driver.find_elements(By.CSS_SELECTOR,'td.mat-cell>span.link')
 
